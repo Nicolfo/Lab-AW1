@@ -21,3 +21,4 @@ let func= (v)=> {
 
 let a=["ciaof","franco","ci"];
 func(a);
+console.log("prova");
