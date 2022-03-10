@@ -20,7 +20,9 @@ let FilmLibrary={
             return x.date.diff(y.date);
         });
     },
-    printer: ()=>{
+    printer: (type=true)=>{
+        if(type)
+            console.log("***** List of films *****");
         for(const a of FilmLibrary.filmati){
            if(a.date!=undefined)
             console.log(`Id: ${a.id}, Title: ${a.title}, Favorite: ${a.favorites}, Whatch Date: ${a.date.format("DD-MM-YY")}, Rating: ${a.rating||"<not assigned>"}`);
@@ -53,7 +55,7 @@ let FilmLibrary={
             }
         }
         FilmLibrary.filmati.sort((x,y)=>(x.rating-y.rating));
-        FilmLibrary.printer();
+        FilmLibrary.printer(false);
         let copy2=[...FilmLibrary.filmati];                         //si poteva evitare lavorando su copy direttamente ma non
         FilmLibrary.filmati=[...copy];                              //volevo rifare il metodo di stampa
         return copy2;
