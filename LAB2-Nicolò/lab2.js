@@ -10,8 +10,9 @@ function Film (id,title,favorites=false,date,rating){
     this.favorites=favorites;
 }
 
-function FilmLibrary(){
+function FilmLibrary(db){
     this.filmati = [];
+    this.db=db;
     this.addNewFilm =(film)=>{this.filmati.push(film)};
     this.sortByDate = () => {
         FilmLibrary.filmati.sort((x,y)=>{
@@ -42,6 +43,7 @@ function FilmLibrary(){
         }
         this.filmati.splice(pos,1);
     };
+    this.deleteAll=()=>{this.filmati=[];};
     this.resetWatchedFilms = () => {
         for(let f of this.filmati){
             f.date=undefined;
@@ -62,40 +64,116 @@ function FilmLibrary(){
         this.filmati=[...copy];                              //volevo rifare il metodo di stampa
         return copy2;
     }
-
-}
-function promDB(dataBase){
-    return new Promise((resolve,reject) =>{
-        let query="SELECT * FROM films";
-        dataBase.all(query,(err,rows)=>{
-            if(err)
-                reject(new Error("Errore DB"));
-            else
-                resolve(rows);
-                    
-        });
-    });
-}
-let arrayFromDB=(db, fl)=>{
-    
-    promDB(db).then((rows)=>{
+    this.arrayFromDB=async (type=0,par)=>{
+        let rows;
+        this.deleteAll();
+        if(type!=undefined && type<3)
+            rows= await this.promDB(type);
+        else
+            rows= await this.promDB(type,par);
         for(let row of rows){
-            fl.addNewFilm(new Film(row.id,row.title,row.favorites==1?true:false,row.whatchdate?new dayjs(row.watchdate):undefined,row.rating));
+                this.addNewFilm(new Film(row.id,row.title,row.favorite==1?true:false,row.watchdate?new dayjs(row.watchdate):undefined,row.rating));
         }
-        fl.printer();
-    }).catch((Err)=>{
-        console.log(Err.toString());
-    }).finally(()=>{
-        return fl.filmati;
-    });
+        return this.filmati;  
+    }
+    this.promDB=function(type,par){
+        return new Promise((resolve,reject) =>{
+            let query;
+            if(type==0)
+                query="SELECT * FROM films";
+            if(type==1)
+                query="SELECT * FROM films WHERE favorite";
+            if(type==2){
+                query=`SELECT * FROM films WHERE watchdate=?`;
+                par=dayjs().format("YYYY-MM-DD");
+            }
+            if(type==3){
+                query=`SELECT * FROM films WHERE DATE(watchdate)<'?'`;
+            }
+            if(type==4){
+                query=`SELECT * FROM films WHERE rating>=?`;
+            }
+            if(type==5){
+                query=`SELECT * FROM films WHERE title=?`;
+                
+            }
+            
+            this.db.all(query,par,(err,rows)=>{
+                if(err)
+                    reject(new Error("Errore DB"));
+                else
+                    resolve(rows);
+                        
+            });
+        });
+    }
+
+    this.store= async function(filmo){
+        return new Promise((resolve,reject)=>{
+            let query="INSERT INTO films (id,title,watchdate,favorite,rating) VALUES(?,?,?,?,?)"
+            this.db.run(query,filmo.id,filmo.title,filmo.date,filmo.favorites,filmo.rating,(err)=>{
+                if(err)
+                    reject(err);
+                else
+                    resolve();
+                        
+            });
     
+        })
+    
+    
+    }
+    this.deleteMovie=async (id) => new Promise((resolve, reject) => {
+        let query = "DELETE FROM films WHERE id=?";
+        this.db.run(query, id, function (err) {
+            if (err)
+                reject(err);
+            else {
+                if (this.changes > 0)
+                    resolve();
+                else {
+                    reject(new Error("Non è stato trovato nessun ID corrispondente"));
+                }
+            }
+
+        });
+    })
+    this.deleteWatchDate=async () => new Promise((resolve, reject) => {
+        let query = "UPDATE films SET watchdate=null";
+        this.resetWatchedFilms();
+        this.db.run(query, (err) => {
+            if (err)
+                reject(err);
+            else {
+
+                resolve();
+            }
+
+        });
+    })
+
 }
 
+
+
+
+async function main(){
 
 const db = new sqlite.Database('./LAB2-Nicolò/films.db',(err)=>{if(err) throw err;});
-let fl1=new FilmLibrary();
-let vett=arrayFromDB(db,fl1);
-
-
-
+let fl1=new FilmLibrary(db);
+let vett=await fl1.arrayFromDB(0);
+let filmBackup;
+await fl1.deleteMovie(vett[0].id);
+filmBackup=vett[0];
+vett=await fl1.arrayFromDB(0);
+fl1.printer();
+await fl1.store(filmBackup);
+vett=await fl1.arrayFromDB(0);
+fl1.printer();
+await fl1.deleteWatchDate(db);
+vett=await fl1.arrayFromDB(0);
+fl1.printer();
 db.close();
+}
+
+main();
