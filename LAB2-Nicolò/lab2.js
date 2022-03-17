@@ -74,7 +74,7 @@ function FilmLibrary(db){
         for(let row of rows){
                 this.addNewFilm(new Film(row.id,row.title,row.favorite==1?true:false,row.watchdate?new dayjs(row.watchdate):undefined,row.rating));
         }
-        return this.filmati;  
+        return [...this.filmati];  
     }
     this.promDB=function(type,par){
         return new Promise((resolve,reject) =>{
@@ -108,8 +108,12 @@ function FilmLibrary(db){
         });
     }
 
-    this.store= async function(filmo){
+    this.storeInDB= async function(filmo){
         return new Promise((resolve,reject)=>{
+            if(filmo && filmo instanceof Film)
+                this.addNewFilm(filmo);
+            else
+                reject(new Error("errore input FILM"));
             let query="INSERT INTO films (id,title,watchdate,favorite,rating) VALUES(?,?,?,?,?)"
             this.db.run(query,filmo.id,filmo.title,filmo.date,filmo.favorites,filmo.rating,(err)=>{
                 if(err)
@@ -123,8 +127,9 @@ function FilmLibrary(db){
     
     
     }
-    this.deleteMovie=async (id) => new Promise((resolve, reject) => {
+    this.deleteMovieDB=async (id) => new Promise((resolve, reject) => {
         let query = "DELETE FROM films WHERE id=?";
+        this.deleteFilm(id);
         this.db.run(query, id, function (err) {
             if (err)
                 reject(err);
@@ -138,7 +143,7 @@ function FilmLibrary(db){
 
         });
     })
-    this.deleteWatchDate=async () => new Promise((resolve, reject) => {
+    this.deleteWatchedDateDB=async () => new Promise((resolve, reject) => {
         let query = "UPDATE films SET watchdate=null";
         this.resetWatchedFilms();
         this.db.run(query, (err) => {
@@ -163,14 +168,14 @@ const db = new sqlite.Database('./LAB2-Nicolò/films.db',(err)=>{if(err) throw e
 let fl1=new FilmLibrary(db);
 let vett=await fl1.arrayFromDB(0);
 let filmBackup;
-await fl1.deleteMovie(vett[0].id);
+await fl1.deleteMovieDB(vett[0].id);
 filmBackup=vett[0];
 vett=await fl1.arrayFromDB(0);
 fl1.printer();
-await fl1.store(filmBackup);
+await fl1.storeInDB(filmBackup);
 vett=await fl1.arrayFromDB(0);
 fl1.printer();
-await fl1.deleteWatchDate(db);
+await fl1.deleteWatchedDateDB(db);
 vett=await fl1.arrayFromDB(0);
 fl1.printer();
 db.close();
