@@ -10,7 +10,9 @@ function Film (id,title,favorites=false,date,rating){
 
 function FilmLibrary(){
     this.filmati = [];
-    this.addNewFilm =(film)=>{this.filmati.push(film)};
+    this.addNewFilm =(film)=>{
+        this.filmati.push(film);
+    };
     this.sortByDate = () => {
         FilmLibrary.filmati.sort((x,y)=>{
             if(x.date==undefined)

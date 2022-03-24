@@ -87,16 +87,12 @@ function FilmLibrary(db){
                 query=`SELECT * FROM films WHERE watchdate=?`;
                 par=dayjs().format("YYYY-MM-DD");
             }
-            if(type==3){
+            if(type==3)
                 query=`SELECT * FROM films WHERE DATE(watchdate)<'?'`;
-            }
-            if(type==4){
+            if(type==4)
                 query=`SELECT * FROM films WHERE rating>=?`;
-            }
-            if(type==5){
+            if(type==5)
                 query=`SELECT * FROM films WHERE title=?`;
-                
-            }
             
             this.db.all(query,par,(err,rows)=>{
                 if(err)
@@ -150,7 +146,6 @@ function FilmLibrary(db){
             if (err)
                 reject(err);
             else {
-
                 resolve();
             }
 
@@ -163,22 +158,21 @@ function FilmLibrary(db){
 
 
 async function main(){
-
-const db = new sqlite.Database('./LAB2-Nicolò/films.db',(err)=>{if(err) throw err;});
-let fl1=new FilmLibrary(db);
-let vett=await fl1.arrayFromDB(0);
-let filmBackup;
-await fl1.deleteMovieDB(vett[0].id);
-filmBackup=vett[0];
-vett=await fl1.arrayFromDB(0);
-fl1.printer();
-await fl1.storeInDB(filmBackup);
-vett=await fl1.arrayFromDB(0);
-fl1.printer();
-await fl1.deleteWatchedDateDB(db);
-vett=await fl1.arrayFromDB(0);
-fl1.printer();
-db.close();
+    const db = new sqlite.Database('./LAB2-Nicolò/films.db',(err)=>{if(err) throw err;});
+    let fl1=new FilmLibrary(db);
+    let vett=await fl1.arrayFromDB(0);
+    let filmBackup;
+    await fl1.deleteMovieDB(vett[0].id);
+    filmBackup=vett[0];
+    vett=await fl1.arrayFromDB(0);
+    fl1.printer();
+    await fl1.storeInDB(filmBackup);
+    vett=await fl1.arrayFromDB(0);
+    fl1.printer();
+    await fl1.deleteWatchedDateDB(db);
+    vett=await fl1.arrayFromDB(0);
+    fl1.printer();
+    db.close();
 }
 
 main();
