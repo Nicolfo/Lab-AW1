@@ -14,7 +14,7 @@ function FilmLibrary(){
         this.filmati.push(film);
     };
     this.sortByDate = () => {
-        FilmLibrary.filmati.sort((x,y)=>{
+        this.filmati.sort((x,y)=>{
             if(x.date==undefined)
                 return 1;
             if(y.date==undefined)
