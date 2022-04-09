@@ -82,7 +82,7 @@ function App() {
     <div class="container-fluid" style={{height:'1000px'}}>
         <div class="row align-items-start">
 
-            <div class="d-flex flex-column flex-shrink-0 bg-light col-3 p-2" style={{width: '280px',height: '1000px'}}>
+            <div class="d-flex flex-column flex-shrink-0 bg-light col-3 p-2" >
                 <aside>
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
@@ -124,7 +124,7 @@ function App() {
                 <div class="row">
                     <main>
                         <h1 id="tit">All</h1>
-                        <table class="table table-hover table-fixed">
+                        <table class="table table-hover table-flex">
                             
                                 <ListItem lib={fl}></ListItem>
                      
