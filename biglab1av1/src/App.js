@@ -1,9 +1,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {Film} from './js/libreria.js';
-import {dayjs} from './js/libreria.js';
-import {FilmLibrary} from './js/libreria.js';
+import checkbox,{Film,dayjs,FilmLibrary} from './js/libreria.js'
 
 
 function ListItem(props){
@@ -12,10 +10,10 @@ function ListItem(props){
         text=`<tr>
 
         <td style="width: 40%">
-            <div id="name${row.id}" style="${row.favorites?'color:red"':'"'}>${row.title}</div>
+            <div id="name${row.id}" style={{${row.favorites?"color:'red'":""}>${row.title}}}</div>
         </td>
 
-        <td style="width: 20%"><input type="checkbox" id="check${row.id}" onclick="checkbox(id,'name${row.id}')" ${row.favorites?"checked":""}> Favorite</td>
+        <td style="width: 20%"><input type="checkbox" id="check${row.id}" onClick="checkbox(id,'name${row.id}')" ${row.favorites?"checked":""}> Favorite</td>
         <td style="width: 20%">${row.date?row.date.format("MMMM DD, YYYY"):""}</td>
         <td style="width: 20%">`;
         for(let i=0;i<row.rating;i++){
@@ -26,7 +24,7 @@ function ListItem(props){
         text=text.concat('</td></tr>');
         return text;
     });
-    return {list};
+    return <tbody>{list}</tbody>;
 }
 
 function App() {
@@ -70,7 +68,7 @@ function App() {
                     <ul class="nav nav-pills flex-column mb-auto">
                         <li class="nav-item">
                             <a id="all" href="#" class="nav-link active link-dark" aria-current="page"
-                                style={{borderRadius: '0px;'}}>
+                                style={{borderRadius: '0px'}}>
                                 All
                             </a>
                         </li>
@@ -108,9 +106,9 @@ function App() {
                     <main>
                         <h1 id="tit">All</h1>
                         <table class="table table-hover table-fixed">
-                            <tbody id="tab">
+                            
                                 <ListItem lib={fl}></ListItem>
-                            </tbody>
+                     
                         </table>
                     </main>
                 </div>

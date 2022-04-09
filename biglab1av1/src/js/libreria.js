@@ -1,7 +1,7 @@
 "use strict"
 
-const dayjs = require('dayjs');
-function Film (id,title,favorites=false,date,rating){
+export const dayjs = require('dayjs');
+export function Film (id,title,favorites=false,date,rating){
     this.id=id;
     this.title=title;
     this.date=date;
@@ -9,7 +9,7 @@ function Film (id,title,favorites=false,date,rating){
     this.favorites=favorites;
 }
 
-function FilmLibrary(){
+export function FilmLibrary(){
     this.filmati = [];
     this.addNewFilm =(film)=>{
         this.filmati.push(film);
@@ -65,7 +65,7 @@ function FilmLibrary(){
     }
 
 }
-function checkbox(id, name) {
+export default function checkbox(id, name) {
     let checkBox = document.getElementById(id);
     let text = document.getElementById(name);
     if (checkBox.checked === true) {
@@ -75,7 +75,6 @@ function checkbox(id, name) {
     }
 }
 
-export {Film,dayjs,FilmLibrary,checkbox}
 
 //FilmLibrary.printer();
 //fl.printer();
