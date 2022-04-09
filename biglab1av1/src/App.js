@@ -1,28 +1,47 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import checkbox,{Film,dayjs,FilmLibrary} from './js/libreria.js'
+import {Film,dayjs,FilmLibrary} from './js/libreria.js'
 
+function checkbox(id, name) {
+
+    //let checkBox = React.findDOMNode(this.refs.id);
+    //let text = React.findDOMNode(this.refs.name);
+   /* if (checkBox && checkBox.checked ) {
+        if(text)
+        text.style.color = "red";
+    } else {
+        if(text)
+            text.style.color = "black";
+    }*/
+}
+
+function PrintStar(props){
+    let rate=props.rate;
+    let k =[];
+    for(let i=0;i<rate;i++){
+       k.push(<img src="img/star-fill.svg" alt="" width="30" height="24"/>);
+    }
+    for(let i=rate;i<5;i++)
+        k.push(<img src="img/star.svg" alt="" width="30" height="24"/>);
+    return k;
+}
 
 function ListItem(props){
     let list=props.lib.filmati.map(row=>{
-        let text;
-        text=`<tr>
-
-        <td style="width: 40%">
-            <div id="name${row.id}" style={{${row.favorites?"color:'red'":""}>${row.title}}}</div>
-        </td>
-
-        <td style="width: 20%"><input type="checkbox" id="check${row.id}" onClick="checkbox(id,'name${row.id}')" ${row.favorites?"checked":""}> Favorite</td>
-        <td style="width: 20%">${row.date?row.date.format("MMMM DD, YYYY"):""}</td>
-        <td style="width: 20%">`;
-        for(let i=0;i<row.rating;i++){
-            text=text.concat('<img src="img/star-fill.svg" alt="" width="30" height="24">');
-        }
-        for(let i=row.rating;i<5;i++)
-            text=text.concat('<img src="img/star.svg" alt="" width="30" height="24">');
-        text=text.concat('</td></tr>');
-        return text;
+      
+       
+        return <tr key={row.id}>
+                <td style={{width: '40%'}}>
+                    <div id={"name"+row.id} style={row.favorites?{color:'red'}:{}}>{row.title}</div>
+                </td>
+                <td style={{width: '20%'}}>
+                    <input type="checkbox" id={"check"+row.id} onClick={checkbox(""+row.id,"name"+row.id) }defaultChecked={row.favorites}/> Favorite</td>
+        <td style={{width: '20%'}}>{row.date?row.date.format("MMMM DD, YYYY"):""}</td>
+        <td style={{width: '20%'}}>
+        <PrintStar rate={row.rating}></PrintStar>
+                </td>
+        </tr>;
     });
     return <tbody>{list}</tbody>;
 }

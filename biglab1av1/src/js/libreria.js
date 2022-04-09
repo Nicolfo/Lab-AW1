@@ -65,15 +65,7 @@ export function FilmLibrary(){
     }
 
 }
-export default function checkbox(id, name) {
-    let checkBox = document.getElementById(id);
-    let text = document.getElementById(name);
-    if (checkBox.checked === true) {
-        text.style.color = "red";
-    } else {
-        text.style.color = "black";
-    }
-}
+
 
 
 //FilmLibrary.printer();
