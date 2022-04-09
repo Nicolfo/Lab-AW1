@@ -1,10 +1,41 @@
-import logo from './logo.svg';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './App.css';
-//import './js/libreria.js'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import {Film} from './js/libreria.js';
+import {dayjs} from './js/libreria.js';
+import {FilmLibrary} from './js/libreria.js';
+
+
+function ListItem(props){
+    let list=props.lib.filmati.map(row=>{
+        let text;
+        text=`<tr>
+
+        <td style="width: 40%">
+            <div id="name${row.id}" style="${row.favorites?'color:red"':'"'}>${row.title}</div>
+        </td>
+
+        <td style="width: 20%"><input type="checkbox" id="check${row.id}" onclick="checkbox(id,'name${row.id}')" ${row.favorites?"checked":""}> Favorite</td>
+        <td style="width: 20%">${row.date?row.date.format("MMMM DD, YYYY"):""}</td>
+        <td style="width: 20%">`;
+        for(let i=0;i<row.rating;i++){
+            text=text.concat('<img src="img/star-fill.svg" alt="" width="30" height="24">');
+        }
+        for(let i=row.rating;i<5;i++)
+            text=text.concat('<img src="img/star.svg" alt="" width="30" height="24">');
+        text=text.concat('</td></tr>');
+        return text;
+    });
+    return {list};
+}
 
 function App() {
+    let fl = new FilmLibrary();
+    fl.addNewFilm(new Film(1,"Pulp Fiction",true,new dayjs('10 March 2022'),5));
+    fl.addNewFilm(new Film(2,"21 Gram",true,new dayjs('17 March 2022'),4));
+    fl.addNewFilm(new Film(3,"Star Wars",false));
+    fl.addNewFilm(new Film(4,"Matrix",false));
+    fl.addNewFilm(new Film(5,"Shrek",false,new dayjs('21 March 2022'),3));
   return (
 <html>
 
@@ -78,7 +109,7 @@ function App() {
                         <h1 id="tit">All</h1>
                         <table class="table table-hover table-fixed">
                             <tbody id="tab">
-
+                                <ListItem lib={fl}></ListItem>
                             </tbody>
                         </table>
                     </main>

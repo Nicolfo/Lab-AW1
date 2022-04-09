@@ -1,5 +1,6 @@
 "use strict"
 
+const dayjs = require('dayjs');
 function Film (id,title,favorites=false,date,rating){
     this.id=id;
     this.title=title;
@@ -15,9 +16,9 @@ function FilmLibrary(){
     };
     this.sortByDate = () => {
         this.filmati.sort((x,y)=>{
-            if(x.date==undefined)
+            if(x.date===undefined)
                 return 1;
-            if(y.date==undefined)
+            if(y.date===undefined)
                 return -1;
             return -x.date.diff(y.date);
         });
@@ -36,7 +37,7 @@ function FilmLibrary(){
         let pos=0;
         
         for(let f of this.filmati){
-            if(f_id==f.id)
+            if(f_id===f.id)
                 break;
             pos++;
         }
@@ -67,24 +68,19 @@ function FilmLibrary(){
 function checkbox(id, name) {
     let checkBox = document.getElementById(id);
     let text = document.getElementById(name);
-    if (checkBox.checked == true) {
+    if (checkBox.checked === true) {
         text.style.color = "red";
     } else {
         text.style.color = "black";
     }
 }
 
-let fl = new FilmLibrary();
-fl.addNewFilm(new Film(1,"Pulp Fiction",true,new dayjs('10 March 2022'),5));
-fl.addNewFilm(new Film(2,"21 Gram",true,new dayjs('17 March 2022'),4));
-fl.addNewFilm(new Film(3,"Star Wars",false));
-fl.addNewFilm(new Film(4,"Matrix",false));
-fl.addNewFilm(new Film(5,"Shrek",false,new dayjs('21 March 2022'),3));
+export {Film,dayjs,FilmLibrary,checkbox}
 
 //FilmLibrary.printer();
 //fl.printer();
 //fl.getRated();
-let fav=document.getElementById("fav");
+/*let fav=document.getElementById("fav");
 let all=document.getElementById("all");
 let best=document.getElementById("best");
 let last=document.getElementById("last");
@@ -306,5 +302,7 @@ lastMonth.addEventListener('click',event =>{
     let tab=document.getElementById("tab");
     tab.innerHTML=text;
 
-});
+});*/
+
+
 
