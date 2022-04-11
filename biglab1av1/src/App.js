@@ -3,27 +3,27 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {Film,dayjs,FilmLibrary} from './js/libreria.js'
 
-function checkbox(id, name) {
+let fl;
+function checkbox(id) {
+    let i;
+    //lastClick=id;
+    for(i=0; i<fl.filmati.length;i++)
+    if(id===fl.filmati[i].id)
+        break;
+    fl.filmati[i].favorites=!fl.filmati[i].favorites;
+    //lastState=fl.filmati[i].favorites;
+   
 
-    //let checkBox = React.findDOMNode(this.refs.id);
-    //let text = React.findDOMNode(this.refs.name);
-   /* if (checkBox && checkBox.checked ) {
-        if(text)
-        text.style.color = "red";
-    } else {
-        if(text)
-            text.style.color = "black";
-    }*/
 }
 
 function PrintStar(props){
     let rate=props.rate;
     let k =[];
     for(let i=0;i<rate;i++){
-       k.push(<img src="img/star-fill.svg" alt="" width="30" height="24"/>);
+       k.push(<img key={i} src="img/star-fill.svg" alt="" width="30" height="24"/>);
     }
     for(let i=rate;i<5;i++)
-        k.push(<img src="img/star.svg" alt="" width="30" height="24"/>);
+        k.push(<img key={i} src="img/star.svg" alt="" width="30" height="24"/>);
     return k;
 }
 
@@ -33,10 +33,10 @@ function ListItem(props){
        
         return <tr key={row.id}>
                 <td style={{width: '40%'}}>
-                    <div id={"name"+row.id} style={row.favorites?{color:'red'}:{}}>{row.title}</div>
+                    <div style={row.favorites ?{color:'red'}:{}}>{row.title}</div>
                 </td>
                 <td style={{width: '20%'}}>
-                    <input type="checkbox" id={"check"+row.id} onClick={checkbox(""+row.id,"name"+row.id) }defaultChecked={row.favorites}/> Favorite</td>
+                    <input type="checkbox" id={"check"+row.id} defaultChecked={row.favorites} onClick={()=> {checkbox(row.id)} }/> Favorite</td>
         <td style={{width: '20%'}}>{row.date?row.date.format("MMMM DD, YYYY"):""}</td>
         <td style={{width: '20%'}}>
         <PrintStar rate={row.rating}></PrintStar>
@@ -47,70 +47,61 @@ function ListItem(props){
 }
 
 function App() {
-    let fl = new FilmLibrary();
+    fl = new FilmLibrary();
     fl.addNewFilm(new Film(1,"Pulp Fiction",true,new dayjs('10 March 2022'),5));
     fl.addNewFilm(new Film(2,"21 Gram",true,new dayjs('17 March 2022'),4));
     fl.addNewFilm(new Film(3,"Star Wars",false));
     fl.addNewFilm(new Film(4,"Matrix",false));
     fl.addNewFilm(new Film(5,"Shrek",false,new dayjs('21 March 2022'),3));
   return (
-<html>
-
-<head>
-   
-</head>
-<title>
-    AW1 LAB3
-</title>
-
-<body>
+<div>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand" style={{color:'white'}} href="#">
+        <nav className="navbar navbar-expand-lg navbar-light bg-primary">
+            <div className="container-fluid">
+                <a className="navbar-brand" style={{color:'white'}} href="./index.html">
                     <img src="img/file-earmark-play.svg" alt="" width="25" height="25"/> Film Library
                 </a>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+                <form className="d-flex">
+                    <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
                 </form>
-                <a class="navbar-brand" style={{color:'white'}} href="#">
+                <a className="navbar-brand" style={{color:'white'}} href="./index.html">
                     <img src="img/person-circle.svg" alt="" width="30" height="24"/>
                 </a>
             </div>
         </nav>
     </header>
-    <div class="container-fluid" style={{height:'1000px'}}>
-        <div class="row align-items-start">
+    <div className="container-fluid" style={{height:'1000px'}}>
+        <div className="row align-items-start">
 
-            <div class="d-flex flex-column flex-shrink-0 bg-light col-3 p-2" >
+            <div className="d-flex flex-column flex-shrink-0 bg-light col-3 p-2" >
                 <aside>
-                    <ul class="nav nav-pills flex-column mb-auto">
-                        <li class="nav-item">
-                            <a id="all" href="#" class="nav-link active link-dark" aria-current="page"
+                    <ul className="nav nav-pills flex-column mb-auto">
+                        <li className="nav-item">
+                            <a id="all" href="./index.html" className="nav-link active link-dark" aria-current="page"
                                 style={{borderRadius: '0px'}}>
                                 All
                             </a>
                         </li>
                         <li>
-                            <a id="fav" href="#" class="nav-link link-dark">
+                            <a id="fav" href="./index.html" className="nav-link link-dark">
 
                                 Favorites
                             </a>
                         </li>
                         <li>
-                            <a id="best" href="#" class="nav-link link-dark">
+                            <a id="best" href="./index.html" className="nav-link link-dark">
 
                                 Best Rated
                             </a>
                         </li>
                         <li>
-                            <a id="last" href="#" class="nav-link link-dark">
+                            <a id="last" href="./index.html" className="nav-link link-dark">
 
                                 Last Seen
                             </a>
                         </li>
                         <li>
-                            <a id="seenLastMonth" href="#" class="nav-link link-dark">
+                            <a id="seenLastMonth" href="./index.html" className="nav-link link-dark">
 
                                 Seen Last Month
                             </a>
@@ -120,19 +111,19 @@ function App() {
 
             </div>
 
-            <div class="col-9">
-                <div class="row">
+            <div className="col-9">
+                <div className="row">
                     <main>
                         <h1 id="tit">All</h1>
-                        <table class="table table-hover table-flex">
+                        <table className="table table-hover table-flex">
                             
                                 <ListItem lib={fl}></ListItem>
                      
                         </table>
                     </main>
                 </div>
-                <div class="row justify-content-end">
-                    <div class="col-1">
+                <div className="row justify-content-end">
+                    <div className="col-1">
                         <img src="img/plus-circle-fill.svg" alt="" width="30" height="24"/>
                     </div>
 
@@ -141,8 +132,7 @@ function App() {
         </div>
 
     </div>
-    </body>
-    </html>
+    </div>
   );
 }
 
