@@ -4,7 +4,7 @@ import './App.css';
 import {Film,dayjs,FilmLibrary} from './js/libreria.js'
 
 let fl;
-function checkbox(id) {
+/*function checkbox(id) {
     let i;
     //lastClick=id;
     for(i=0; i<fl.filmati.length;i++)
@@ -14,7 +14,7 @@ function checkbox(id) {
     //lastState=fl.filmati[i].favorites;
    
 
-}
+}*/
 
 function PrintStar(props){
     let rate=props.rate;
@@ -36,7 +36,7 @@ function ListItem(props){
                     <div style={row.favorites ?{color:'red'}:{}}>{row.title}</div>
                 </td>
                 <td style={{width: '20%'}}>
-                    <input type="checkbox" id={"check"+row.id} defaultChecked={row.favorites} onClick={()=> {checkbox(row.id)} }/> Favorite</td>
+                    <input type="checkbox" id={"check"+row.id} defaultChecked={row.favorites} /*onClick={()=> {checkbox(row.id)} }*//> Favorite</td>
         <td style={{width: '20%'}}>{row.date?row.date.format("MMMM DD, YYYY"):""}</td>
         <td style={{width: '20%'}}>
         <PrintStar rate={row.rating}></PrintStar>
