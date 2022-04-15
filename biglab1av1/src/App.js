@@ -4,17 +4,6 @@ import './App.css';
 import {Film,dayjs,FilmLibrary} from './js/libreria.js'
 import React, {useState} from 'react';
 let fl;
-/*function checkbox(id) {
-    let i;
-    //lastClick=id;
-    for(i=0; i<fl.filmati.length;i++)
-    if(id===fl.filmati[i].id)
-        break;
-    fl.filmati[i].favorites=!fl.filmati[i].favorites;
-    //lastState=fl.filmati[i].favorites;
-   
-
-}*/
 
 function PrintStar(props){
     let rate=props.rate;
