@@ -2,7 +2,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import {Film,dayjs,FilmLibrary} from './js/libreria.js'
-
+import React, {useState} from 'react';
 let fl;
 /*function checkbox(id) {
     let i;
@@ -26,17 +26,26 @@ function PrintStar(props){
         k.push(<img key={i} src="img/star.svg" alt="" width="30" height="24"/>);
     return k;
 }
-
+function FavoriteAndCheckBox(props){
+    let defState=props.row.favorites;
+    defState=defState!==undefined && defState!== null?defState:false;
+    const [fav,setFav]=useState(defState);
+    return (<>
+        <td style={{width: '40%'}}>
+                    <div style={fav?{color:'red'}:{}}>{props.row.title}</div>
+                </td>
+                <td style={{width: '20%'}}>
+                    <input type="checkbox" id={"check"+props.row.id} defaultChecked={props.row.favorites} onClick={()=>  {setFav(!fav);props.row.favorites=fav}}/> Favorite</td>
+                </>
+    );
+    
+}
 function ListItem(props){
     let list=props.lib.filmati.map(row=>{
       
        
         return <tr key={row.id}>
-                <td style={{width: '40%'}}>
-                    <div style={row.favorites ?{color:'red'}:{}}>{row.title}</div>
-                </td>
-                <td style={{width: '20%'}}>
-                    <input type="checkbox" id={"check"+row.id} defaultChecked={row.favorites} /*onClick={()=> {checkbox(row.id)} }*//> Favorite</td>
+                <FavoriteAndCheckBox row={row}></FavoriteAndCheckBox>
         <td style={{width: '20%'}}>{row.date?row.date.format("MMMM DD, YYYY"):""}</td>
         <td style={{width: '20%'}}>
         <PrintStar rate={row.rating}></PrintStar>
